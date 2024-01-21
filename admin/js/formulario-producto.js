@@ -9,85 +9,50 @@ const expresiones = {
     inputPeso: /^[0-9.]{1,6}$/,
     inputMaterial: /^.{1,15}$/,
     inputStock: /^[0-9]{1,6}$/
-}
+};
 
 const campos = {
     inputProducto: false,
     inputModelo: false,
-    inputProducto: false,
     inputDetalle: false,
     inputPeso: false,
     inputMaterial: false,
     inputStock: false
-}
+};
 
 const validarCampo = (expresion, input, campo) => {
-    if(expresion.test(input.value)) {
-        document.getElementById(`${campo}`).classList.add('is-valid');
-        document.getElementById(`${campo}`).classList.remove('is-invalid');
-        campos[campo] = true;
-    }
-    else{
-        document.getElementById(`${campo}`).classList.add('is-invalid');
-        document.getElementById(`${campo}`).classList.remove('is-ivalid');
-        campos[campo] = false;
-    }
-}
+    const element = document.getElementById(`${campo}`);
+    element.classList[expresion.test(input.value) ? 'add' : 'remove']('is-valid');
+    element.classList[expresion.test(input.value) ? 'remove' : 'add']('is-invalid');
+    campos[campo] = expresion.test(input.value);
+};
 
 const validarFormulario = (e) => {
-    switch(e.target.name) {
+    const { name, value } = e.target;
+    switch (name) {
         case "inputProducto":
-              validarCampo(expresiones.inputProducto,e.target,'inputProducto');
-        break;
         case "inputModelo":
-            validarCampo(expresiones.inputModelo,e.target,'inputModelo');
-        break;
-        case "inputProducto":
-        validarCampo(expresiones.inputProducto,e.target,'inputProducto');
-        break;
         case "inputDetalle":
-            validarCampo(expresiones.inputDetalle,e.target,'inputDetalle');
-        break;
         case "inputPeso":
-            validarCampo(expresiones.inputPeso,e.target,'inputPeso');
-        break;
         case "inputMaterial":
-            validarCampo(expresiones.inputMaterial,e.target,'inputMaterial');
-        break;
         case "inputStock":
-            validarCampo(expresiones.inputStock,e.target,'inputStock');
-        break; 
+            validarCampo(expresiones[name], e.target, name);
+            break;
         case "inputTalla":
-            if(e.target.value !==''){
-                document.getElementById('inputTalla').classList.remove('is-invalid');
-                document.getElementById('inputTalla').classList.add('is-valid');
-             
-            } else {
-                document.getElementById('inputTalla').classList.remove('is-valid');
-                document.getElementById('inputTalla').classList.add('is-invalid');
-                
-            }
-         break;  
-         case "inputImagen":
-            if(e.target.value !==''){
-                document.getElementById('inputImagen').classList.remove('is-invalid');
-                document.getElementById('inputImagen').classList.add('is-valid');
-             
-            } else {
-                document.getElementById('inputImagen').classList.remove('is-valid');
-                document.getElementById('inputImagen').classList.add('is-invalid');
-                
-            }
-         break; 
+        case "inputImagen":
+            const element = document.getElementById(name);
+            element.classList[value !== '' ? 'add' : 'remove']('is-valid');
+            element.classList[value !== '' ? 'remove' : 'add']('is-invalid');
+            break;
     }
-}
+};
 
 inputs.forEach((input) => {
     input.addEventListener('keyup', validarFormulario);
-    input.addEventListener('blur', validarFormulario)
+    input.addEventListener('blur', validarFormulario);
 });
 
 selects.forEach((select) => {
     console.log(select);
-    select.addEventListener('blur' , validarFormulario);
+    select.addEventListener('blur', validarFormulario);
 });
